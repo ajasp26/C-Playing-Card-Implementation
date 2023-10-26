@@ -1,48 +1,39 @@
 #include "deck.h"
-#include "card.h"
-#include <stack>
-#include <memory>
 #include <algorithm>
+#include <iterator>
+#include <random>
 
-Deck::Deck(std::default_random_engine &_gen) : gen{_gen}
+Deck::Deck()
 {
-    constexpr auto suitVec = std::array<Suit, 4>{
-        Suit::Club, Suit::Diamond, Suit::Heart, Suit::Spade};
-    constexpr auto valueVec = std::array<Value, 13>{
-        Value::Two, Value::Three, Value::Four, Value::Five,
-        Value::Six, Value::Seven, Value::Eight, Value::Nine,
-        Value::Ten, Value::Jack, Value::Queen, Value::King, Value::Ace};
-    for (auto ivalue : valueVec)
+    loadDeck();
+    shuffle();
+}
+
+void Deck::loadDeck()
+{
+    cards.clear();
+    for (int suit = static_cast<int>(Suit::Spades); suit <= static_cast<int>(Suit::Hearts); ++suit)
     {
-        for (auto isuit : suitVec)
+        for (int rank = static_cast<int>(Rank::Two); rank <= static_cast<int>(Rank::Ace); ++rank)
         {
-            cards.push_back(std::make_unique<Card>(isuit, ivalue));
+            cards.push_back(std::make_shared<Card>(static_cast<Suit>(suit), static_cast<Rank>(rank)));
         }
     }
-    reshuffle();
 }
 
-void Deck::reshuffle()
+void Deck::shuffle()
 {
-    std::shuffle(cards.begin(), cards.end(), gen);
-    std::stack<Card *> tmpStack;
-    for (auto &card : cards)
-    {
-        tmpStack.push(card.get());
-    }
-    drawPile.swap(tmpStack);
+    std::shuffle(cards.begin(), cards.end(), generator);
 }
 
-Card *Deck::draw()
+std::shared_ptr<Card> Deck::draw()
 {
-    if (drawPile.empty())
+    if (cards.empty())
     {
         return nullptr;
     }
-    else
-    {
-        Card *temp = drawPile.top();
-        drawPile.pop();
-        return temp;
-    }
+
+    auto card = cards.back();
+    cards.pop_back();
+    return card;
 }

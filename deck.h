@@ -1,19 +1,24 @@
-#include <vector>
-#include <memory>
-#include <random>
-#include <stack>
-#include "card.h"
+#ifndef DECK_H
+#define DECK_H
 
-class Deck;
+#include "card.h"
+#include <vector>
+#include <random>
+#include <memory>
 
 class Deck
 {
-private:
-    std::default_random_engine& gen;
-    std::vector<std::unique_ptr<Card>> cards;
-    std::stack<Card*> drawPile;
 public:
-    Deck(std::default_random_engine& _gen);
-    void reshuffle();
-    Card* draw();
+    Deck();
+
+    void shuffle();
+    std::shared_ptr<Card> draw();
+
+private:
+    std::vector<std::shared_ptr<Card>> cards;
+    std::default_random_engine generator;
+
+    void loadDeck();
 };
+
+#endif // DECK_H

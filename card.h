@@ -1,16 +1,17 @@
-#include <ostream>
-
 #ifndef CARD_H
 #define CARD_H
 
+#include <ostream>
+
 enum class Suit
 {
-    Spade,
-    Club,
-    Diamond,
-    Heart
+    Spades,
+    Clubs,
+    Diamonds,
+    Hearts
 };
-enum class Value
+
+enum class Rank
 {
     Two,
     Three,
@@ -26,19 +27,26 @@ enum class Value
     King,
     Ace
 };
+
 class Card
 {
-private:
-    const Suit suit;
-    const Value value;
 public:
-    Card(Suit _suit, Value _value);
-    bool sameSuit(const Card &other);
-    bool sameValue(const Card &other);
+    Card(Suit suit, Rank rank);
+
+    Suit getSuit() const;
+    Rank getRank() const;
+
+    bool sameSuit(const Card &other) const;
+    bool sameRank(const Card &other) const;
+
     friend bool operator==(const Card &lhs, const Card &rhs);
     friend bool operator<(const Card &lhs, const Card &rhs);
     friend bool operator>(const Card &lhs, const Card &rhs);
-    friend std::ostream &operator<<(std::ostream &s, const Card &c);
+    friend std::ostream &operator<<(std::ostream &os, const Card &card);
+
+private:
+    Suit suit;
+    Rank rank;
 };
 
-#endif
+#endif // CARD_H
