@@ -9,6 +9,7 @@ Deck::Deck()
     shuffle();
 }
 
+// loadDeck: Fills the deck with a standard set of 52 playing cards.
 void Deck::loadDeck()
 {
     cards.clear();
@@ -21,11 +22,13 @@ void Deck::loadDeck()
     }
 }
 
+// shuffle: Randomizes the order of the cards in the deck.
 void Deck::shuffle()
 {
     std::shuffle(cards.begin(), cards.end(), generator);
 }
 
+// draw: Removes and returns the top card from the deck.
 std::shared_ptr<Card> Deck::draw()
 {
     if (cards.empty())
